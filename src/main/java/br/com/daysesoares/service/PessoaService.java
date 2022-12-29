@@ -2,7 +2,6 @@ package br.com.daysesoares.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -43,5 +42,23 @@ public class PessoaService {
 		
 		return pessoa;
 		
+	}
+
+	public Pessoa findByName(String nome) {
+		List<Pessoa> list = new ArrayList<>();
+		Pessoa pessoa = new Pessoa(1, "João", 30);
+		list.add(pessoa);
+		pessoa = new Pessoa(2, "Maria", 25);
+		list.add(pessoa);
+		pessoa = new Pessoa(3, "Pedro", 18);
+		list.add(pessoa);
+		pessoa = null;
+		for (Pessoa f : list) {
+			if(f.getNome().equals(nome)) {
+				pessoa = f;
+			}
+		}
+		
+		return pessoa;
 	}
 }

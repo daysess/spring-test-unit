@@ -37,4 +37,13 @@ public class PessoaController {
 		return ResponseEntity.ok(obj);
 	}
 	
+	@GetMapping("/by-name/{nome}")
+	public ResponseEntity<Pessoa> getPessoaByName(@PathVariable String nome) throws Exception{
+		Pessoa obj = pessoaService.findByName(nome);
+		if("vazio".equals(nome)) {
+			throw new Exception("Erro forçado!!!");
+		}		
+		return ResponseEntity.ok(obj);
+	}
+	
 }

@@ -1,5 +1,7 @@
 package br.com.daysesoares.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,6 +65,34 @@ public class PessoaControllerTest {
 		.statusCode(HttpStatus.BAD_REQUEST.value());
 		
 		verify(this.pessoaService, never()).findById(-1);
+	}
+	
+	@Test
+	public void deveRetornarSucesso_QuandoPesquisarPessoaPorNome() {		
+		when(this.pessoaService.findById(2)).thenReturn(new Pessoa(2, "Jonas", 30));
+		RestAssuredMockMvc.given()
+		.accept(ContentType.JSON)
+		.when()
+		.get("/pessoas/by-name/{nome}", "Jonas")
+		.then()
+		.statusCode(HttpStatus.OK.value());
+	}
+	
+	@Test
+	public void deveRetornarError_QuandoPesquisarNomePessoaVazio() {
+	    Exception exception = assertThrows(Exception.class, () -> {
+	    	RestAssuredMockMvc.given()
+			.accept(ContentType.JSON)
+			.when()
+			.get("/pessoas/by-name/{name}", "vazio")
+			.then()
+			.statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+	    });
+
+	    String expectedMessage = "Erro forçado";
+	    String actualMessage = exception.getMessage();
+
+	    assertTrue(actualMessage.contains(expectedMessage));
 	}
 	
 }
